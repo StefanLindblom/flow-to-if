@@ -14,29 +14,32 @@ The python script is not optimised in any special way, but it seems to do the jo
 Usage
 -----
 - It is expected that you already have nfcap set up, in my case the destination directory is
-    /opt/nfsen/profiles-data/live/
+    `/opt/nfsen/profiles-data/live/`
 
 - Python 2.7 with scapy
+    ```
     make_install pip
     pip install scapy
-
+    ```
 - file_monitor.sh needs to be running at all times (cronjob?), to detect new nfcap files. It depends on inotify-tools:
-    sudo apt-get install inotify-tools
+    `sudo apt-get install inotify-tools`
 
 - file_monitor.sh will then trigger nfdump-to-packet.py, which will send the 5-tuple (so far only IPv4 TCP or UDP) to the configured network interface. In my case I set up a dummy interface called nfdump:
+    ```
     sudo ip link add name nfdump type dummy
     sudo ifconfig nfdump up
-
+    ```
 
 Troubleshooting
 ---------------
 - To verify that the file system monitoring is working properly, do the following in two separate shells:
-    ./file_monitor.sh
+   
+    `./file_monitor.sh`
 
-    touch /opt/nfsen/profiles-data/live/nfcapd.2018123
+    `touch /opt/nfsen/profiles-data/live/nfcapd.2018123`
 
 - To verify that nfdump-to-packet.py can create and send packets to the network interface, two shells again:
-    echo "2011,2012,garbage,10.10.10.10,20.20.20.20,55555,80,TCP" | python nfdump-to-packet.py -
+    `echo "2011,2012,garbage,10.10.10.10,20.20.20.20,55555,80,TCP" | python nfdump-to-packet.py -`
 
-    tcpdump -n -i nfdump ''
+    `tcpdump -n -i nfdump ''`
 
