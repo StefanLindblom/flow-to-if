@@ -4,7 +4,10 @@ import sys
 # Set destination interface
 dst_if = "nfdump"
 
+
 try:
+  s = conf.L2socket(iface=dst_if)
+
   for line in sys.stdin:
     row = line.split(',')
 
@@ -24,8 +27,10 @@ try:
       packet = IP(src=ip_src, dst=ip_dst)/TCP(sport=int(port_src), dport=int(port_dst))/""
     elif proto == 'UDP':
       packet = IP(src=ip_src, dst=ip_dst)/UDP(sport=int(port_src), dport=int(port_dst))/""
+    else:
+      continue
 
-    sendp(Ether()/packet, iface=dst_if)
+    s.send(Ether()/packet)
 
 except IOError, e:
     if e.errno == errno.EPIPE:
