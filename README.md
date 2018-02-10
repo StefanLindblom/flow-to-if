@@ -18,7 +18,7 @@ Usage
 
 - Python 2.7 with scapy
     ```
-    make_install pip
+    easy_install pip
     pip install scapy
     ```
 - file_monitor.sh needs to be running at all times (cronjob?), to detect new nfcap files. It depends on inotify-tools:
